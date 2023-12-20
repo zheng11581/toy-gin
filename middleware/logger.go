@@ -20,6 +20,6 @@ func LogInput(ctx *gin.Context) {
 	mp["body"] = string(requestBody)
 	log.Printf("LogInput: %v", mp)
 	ctx.Next()
-	log.Println("LogInput: After Next()")
+	// log.Println("LogInput: After Next()")
 
 }

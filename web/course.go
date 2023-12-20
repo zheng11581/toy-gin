@@ -8,12 +8,13 @@ import (
 
 func GetCourseDetail(ctx *gin.Context) {
 	courseId := ctx.Param("id")
-	courseName := ctx.Query("name")
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "获取课程详情成功",
 		"id":      courseId,
-		"name":    courseName,
 	})
+	mp := make(map[string]string)
+	mp["id"] = courseId
+	WrapContext(ctx).Success(mp)
 }
 
 func GetCourseVideo(ctx *gin.Context) {
