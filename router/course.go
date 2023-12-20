@@ -16,6 +16,7 @@ func InitCourse(r *gin.Engine) {
 	v1.GET("/view/:id", web.GetCourseVideo)
 
 	admin := course.Group("/admin")
+	admin.Use(middleware.AuthCheck)
 	adminV1 := admin.Group("/v1")
 	adminV1.POST("/add", web.AddCourse)
 	adminV1.POST("/publish", web.PublishCourse)

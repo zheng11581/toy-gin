@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"log"
 
@@ -19,7 +18,8 @@ func LogInput(ctx *gin.Context) {
 	mp["method"] = ctx.Request.Method
 	mp["access_token"] = ctx.GetHeader("access_token")
 	mp["body"] = string(requestBody)
-	log.Println(mp)
+	log.Printf("LogInput: %v", mp)
 	ctx.Next()
-	fmt.Println("called LoginInput")
+	log.Println("LogInput: After Next()")
+
 }

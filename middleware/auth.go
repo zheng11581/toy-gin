@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,6 +9,6 @@ import (
 func AuthCheck(ctx *gin.Context) {
 	userName, _ := ctx.Get("user_name")
 	userId := ctx.GetString("user_id")
-	fmt.Printf("called auth check, userName: %s, userId: %s", userName, userId)
+	log.Printf("AuthCheck: get userName: %s, userId: %s", userName, userId)
 	ctx.Next()
 }
