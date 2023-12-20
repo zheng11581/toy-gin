@@ -1,12 +1,13 @@
-package web
+package course
 
 import (
 	"net/http"
+	"zheng11581/toy-gin/handlers"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetCourseDetail(ctx *gin.Context) {
+func Get(ctx *gin.Context) {
 	courseId := ctx.Param("id")
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "获取课程详情成功",
@@ -14,21 +15,21 @@ func GetCourseDetail(ctx *gin.Context) {
 	})
 	mp := make(map[string]string)
 	mp["id"] = courseId
-	WrapContext(ctx).Success(mp)
+	handlers.WrapContext(ctx).Success(mp)
 }
 
-func GetCourseVideo(ctx *gin.Context) {
-
-}
-
-func AddCourse(ctx *gin.Context) {
+func List(ctx *gin.Context) {
 
 }
 
-func PublishCourse(ctx *gin.Context) {
+func Update(ctx *gin.Context) {
 
 }
 
-func UploadCourse(ctx *gin.Context) {
+func Delete(ctx *gin.Context) {
+
+}
+
+func Add(ctx *gin.Context) {
 
 }

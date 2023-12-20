@@ -1,7 +1,8 @@
-package web
+package login
 
 import (
 	"net/http"
+	"zheng11581/toy-gin/handlers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,9 +26,9 @@ func Register(ctx *gin.Context) {
 	req := &registerReq{}
 	err := ctx.ShouldBindJSON(req)
 	if err != nil {
-		WrapContext(ctx).Error(http.StatusInternalServerError, "参数不合法，绑定参数失败")
+		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "参数不合法，绑定参数失败")
 		return
 	}
-	WrapContext(ctx).Success(req)
+	handlers.WrapContext(ctx).Success(req)
 
 }
