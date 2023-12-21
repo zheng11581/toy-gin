@@ -18,5 +18,6 @@ func AuthCheck(ctx *gin.Context) {
 		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "身份认证失败")
 		ctx.Abort()
 	}
+	ctx.Set("user_info", data)
 	ctx.Next()
 }

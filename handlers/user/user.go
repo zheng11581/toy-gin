@@ -13,6 +13,15 @@ func Get(ctx *gin.Context) {
 	handlers.WrapContext(ctx).Success(userId)
 }
 
+func GetV2(ctx *gin.Context) {
+	userInfo, ok := ctx.Get("user_info")
+	if !ok {
+		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "获取用户信息失败")
+		return
+	}
+	handlers.WrapContext(ctx).Success(userInfo)
+}
+
 type userListReq struct {
 	Keyword string `json:"keyword"`
 }

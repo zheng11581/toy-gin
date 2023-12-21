@@ -13,4 +13,7 @@ func InitUser(group *gin.RouterGroup) {
 	v1.POST("/user", user.Add)
 	v1.PUT("/user/:id", user.Update)
 	v1.DELETE("/user/:id", user.Delete)
+
+	v2 := group.Group("/v2")
+	v2.GET("/user/:id", user.GetV2)
 }
