@@ -8,8 +8,11 @@ import (
 
 func InitRouters(r *gin.Engine) {
 	api := r.Group("/api")
-	api.Use(middleware.LogInput)
-	InitLogin(api)
+	api.Use(middleware.LogInput, middleware.CORS())
 	InitCourse(api)
 	InitUser(api)
+
+	noAuthApi := r.Group("/api")
+	InitLogin(noAuthApi)
+
 }

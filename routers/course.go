@@ -9,7 +9,6 @@ import (
 
 func InitCourse(group *gin.RouterGroup) {
 	v1 := group.Group("/v1")
-	v1.Use(middleware.TokenCheck)
 	v1.Use(middleware.AuthCheck)
 	v1.GET("/course/:id", course.Get)
 	v1.GET("/course", course.List)

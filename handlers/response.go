@@ -10,8 +10,8 @@ type Response struct {
 	StatusCode int         `json:"status_code" ` // 业务状态码
 	Message    string      `json:"message" `     // 提示信息
 	Data       interface{} `json:"data" `        // 任何数据
-	Meta       Meta        `json:"meta" `        // 源数据，存储比如请求ID、分页信息等
-	Errors     []ErrorItem `json:"errors" `      // 错误提示，比如xx字段不能为空等
+	// Meta       Meta        `json:"meta" `        // 源数据，存储比如请求ID、分页信息等
+	Errors []ErrorItem `json:"errors" ` // 错误提示，比如xx字段不能为空等
 }
 
 type Meta struct {
@@ -29,10 +29,10 @@ func NewResponse() *Response {
 		StatusCode: 200,
 		Message:    "success",
 		Data:       nil,
-		Meta: Meta{
-			RequestID: "1234", // 可以是uuid
-			Page:      1,
-		},
+		// Meta: Meta{
+		// 	RequestID: "1234", // 可以是uuid
+		// 	Page:      1,
+		// },
 		Errors: []ErrorItem{},
 	}
 }
