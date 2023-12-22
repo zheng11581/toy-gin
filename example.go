@@ -3,6 +3,8 @@ package main
 import (
 	"zheng11581/toy-gin/routers"
 
+	_ "zheng11581/toy-gin/models"
+
 	"github.com/gin-gonic/gin"
 )
 
