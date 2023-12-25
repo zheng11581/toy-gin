@@ -12,6 +12,10 @@ type IngMonitorConf struct {
 	Conf string
 }
 
+func (IngMonitorConf) TableName() string {
+	return "ingress_monitor_conf"
+}
+
 // IngMonitorSilence 静音配置
 type IngMonitorSilence struct {
 	ID          uint
@@ -25,6 +29,10 @@ type IngMonitorSilence struct {
 	ExpireAt    time.Time `gorm:"comments:'这条配置什么时候过期'"`
 	RequireMan  string    `gorm:"size:128;comments:'配置谁要求加的'"`
 	Reason      string    `gorm:"size:256;comments:'配置为什么添加'"`
+}
+
+func (IngMonitorSilence) TableName() string {
+	return "ingress_monitor_silence"
 }
 
 // IngMonitorRule 告警规则
@@ -48,6 +56,10 @@ type IngMonitorRule struct {
 	ExtendReceiver string  `gorm:"size:258;comments:'自定义接受组, im group id, 多个逗号分隔'"`
 }
 
+func (IngMonitorRule) TableName() string {
+	return "ingress_monitor_rule"
+}
+
 // IngMonitorSpecialRule 特殊规则
 type IngMonitorSpecialRule struct {
 	ID          uint
@@ -57,4 +69,8 @@ type IngMonitorSpecialRule struct {
 	UpdatedUser string `gorm:"size:128;comments:'最后更新人员'"`
 	Filter      string `gorm:"size:2048;comments:'匹配规则'"`
 	AlarmRule   string `gorm:"size:2048;comments:'告警规则'"`
+}
+
+func (IngMonitorSpecialRule) TableName() string {
+	return "ingress_monitor_special"
 }
