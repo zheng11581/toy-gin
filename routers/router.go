@@ -13,6 +13,8 @@ func InitRouters(r *gin.Engine) {
 	InitUser(api)
 
 	noAuthApi := r.Group("/api")
+	noAuthApi.Use(middleware.LogInput, middleware.CORS())
 	InitLogin(noAuthApi)
+	InitConf(noAuthApi)
 
 }
