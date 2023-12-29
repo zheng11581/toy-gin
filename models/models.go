@@ -2,14 +2,16 @@ package models
 
 import (
 	"time"
+
+	"gorm.io/gorm"
 )
 
 // IngMonitorConf 全局的一些配置, json或者yaml格式存储，主要是变化不大的配置
 type IngMonitorConf struct {
-	ID   uint
-	Host string `gorm:"size:32"`
-	Name string `gorm:"size:32"`
-	Conf string
+	gorm.Model
+	Host string `gorm:"size:32;comments:'监控客户端的IP地址'"`
+	Name string `gorm:"size:32;comments:'监控客户端的名字'"`
+	Conf string `gorm:"size:2048;comments:'基础配置'"`
 }
 
 func (IngMonitorConf) TableName() string {
@@ -18,9 +20,7 @@ func (IngMonitorConf) TableName() string {
 
 // IngMonitorSilence 静音配置
 type IngMonitorSilence struct {
-	ID          uint
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	gorm.Model
 	CreateUser  string    `gorm:"size:128;comments:'创建人'"`
 	UpdatedUser string    `gorm:"size:128;comments:'最后更新人员'"`
 	ConfType    int       `gorm:"comments:'这条配置属于配置'"`
@@ -37,9 +37,7 @@ func (IngMonitorSilence) TableName() string {
 
 // IngMonitorRule 告警规则
 type IngMonitorRule struct {
-	ID             uint
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
+	gorm.Model
 	CreateUser     string  `gorm:"size:128;comments:'创建人'"`
 	UpdatedUser    string  `gorm:"size:128;comments:'最后更新人员'"`
 	RuleName       string  `gorm:"size:128;comments:'规则名称'"`
@@ -62,9 +60,7 @@ func (IngMonitorRule) TableName() string {
 
 // IngMonitorSpecialRule 特殊规则
 type IngMonitorSpecialRule struct {
-	ID          uint
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	gorm.Model
 	CreateUser  string `gorm:"size:128;comments:'创建人'"`
 	UpdatedUser string `gorm:"size:128;comments:'最后更新人员'"`
 	Filter      string `gorm:"size:2048;comments:'匹配规则'"`

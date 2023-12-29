@@ -10,12 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type confReq struct {
-	Host string `json:"host"`
-	Name string `json:"name"`
-	Conf string `json:"conf"`
-}
-
 func Get(ctx *gin.Context) {
 	confID := ctx.Param("id")
 	conf := models.IngMonitorConf{}
@@ -28,13 +22,17 @@ func Get(ctx *gin.Context) {
 		}
 	}
 
-	// 保存到 confReq
-	req := confReq{}
+	// 保存到 ConfBase
+	respConf := handlers.ConfBase{}
 	confBytes, err := json.Marshal(conf)
 	if err != nil {
 		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "返回失败")
 	}
-	json.Unmarshal(confBytes, &req)
-	handlers.WrapContext(ctx).Success(req)
+	json.Unmarshal(confBytes, &respConf)
+	handlers.WrapContext(ctx).Success(respConf)
 	// models.IngressDB.Select("host", "name", "host")
+}
+
+func List(ctx *gin.Context) {
+
 }
