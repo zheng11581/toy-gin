@@ -8,10 +8,12 @@ import (
 
 // IngMonitorConf 全局的一些配置, json或者yaml格式存储，主要是变化不大的配置
 type IngMonitorConf struct {
-	gorm.Model
-	Host string `gorm:"size:32;comments:'监控客户端的IP地址'"`
-	Name string `gorm:"size:32;comments:'监控客户端的名字'"`
-	Conf string `gorm:"size:2048;comments:'基础配置'"`
+	ID        uint      `json:"id"`
+	CreatedAt time.Time `json:"create_at"`
+	UpdatedAt time.Time `json:"update_at"`
+	Host      string    `gorm:"size:32;comments:'监控客户端的IP地址'" json:"host"`
+	Name      string    `gorm:"size:32;comments:'监控客户端的名字'" json:"name"`
+	Conf      string    `gorm:"size:2048;comments:'基础配置'" json:"conf"`
 }
 
 func (IngMonitorConf) TableName() string {

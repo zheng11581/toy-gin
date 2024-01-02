@@ -1,8 +1,8 @@
 package conf
 
 import (
-	"encoding/json"
 	"net/http"
+	"strconv"
 	"zheng11581/toy-gin/handlers"
 	"zheng11581/toy-gin/models"
 
@@ -11,28 +11,119 @@ import (
 )
 
 func Get(ctx *gin.Context) {
-	confID := ctx.Param("id")
-	conf := models.IngMonitorConf{}
+	// 绑定参数
+	confID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
+	if err != nil {
+		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+	}
+
 	// 查询数据 IngMonitorConf
-	result := models.DB.Where("id = ?", confID).First(&conf)
+	var conf models.IngMonitorConf
+	conf.ID = uint(confID)
+	result := models.DB.First(&conf)
 	if result.Error != nil {
 		switch result.Error {
 		case gorm.ErrRecordNotFound:
-			handlers.WrapContext(ctx).Error(http.StatusNotFound, "记录未找到")
+			handlers.WrapContext(ctx).Error(http.StatusNotFound, "查询数据失败")
 		}
 	}
 
-	// 保存到 ConfBase
-	respConf := handlers.ConfBase{}
-	confBytes, err := json.Marshal(conf)
+	// 返回结果
+	handlers.WrapContext(ctx).Success(&conf)
+}
+
+func Delete(ctx *gin.Context) {
+	// 绑定参数
+	confID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
 	if err != nil {
-		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "返回失败")
+		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
 	}
-	json.Unmarshal(confBytes, &respConf)
-	handlers.WrapContext(ctx).Success(respConf)
-	// models.IngressDB.Select("host", "name", "host")
+
+	// 删除数据 IngMonitorConf
+	var conf models.IngMonitorConf
+	conf.ID = uint(confID)
+	result := models.DB.Delete(&conf)
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			handlers.WrapContext(ctx).Error(http.StatusNotFound, "删除数据失败")
+		}
+	}
+
+	// 返回结果
+	handlers.WrapContext(ctx).Success(&conf)
 }
 
 func List(ctx *gin.Context) {
+	// 绑定参数
+	reqConf := &handlers.ConfBase{}
+	err := ctx.ShouldBindJSON(reqConf)
+	if err != nil {
+		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+	}
 
+	// 查询列表 IngMonitorConf
+	var confList []models.IngMonitorConf
+	result := models.DB.Where("host = ?", reqConf.Host).Find(&confList)
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			handlers.WrapContext(ctx).Error(http.StatusNotFound, "查询数据失败")
+		}
+	}
+
+	// 返回结果
+	handlers.WrapContext(ctx).Success(confList)
+
+}
+
+func Add(ctx *gin.Context) {
+	// 绑定参数
+	reqConf := handlers.ConfBase{}
+	err := ctx.ShouldBindJSON(&reqConf)
+	if err != nil {
+		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+	}
+	// 新增数据
+	var conf models.IngMonitorConf
+	conf.Host = reqConf.Host
+	conf.Name = reqConf.Name
+	conf.Conf = reqConf.Conf
+	result := models.DB.Create(&conf)
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			handlers.WrapContext(ctx).Error(http.StatusNotFound, "新增数据失败")
+		}
+	}
+	// 返回结果
+	handlers.WrapContext(ctx).Success(conf)
+}
+
+func Update(ctx *gin.Context) {
+	// 绑定参数
+	confID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
+	if err != nil {
+		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+	}
+	reqConf := handlers.ConfBase{}
+	err = ctx.ShouldBindJSON(&reqConf)
+	if err != nil {
+		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+	}
+	// 更新数据
+	var conf models.IngMonitorConf
+	conf.ID = uint(confID)
+	conf.Host = reqConf.Host
+	conf.Name = reqConf.Name
+	conf.Conf = reqConf.Conf
+	result := models.DB.Updates(&conf)
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			handlers.WrapContext(ctx).Error(http.StatusNotFound, "更新数据失败")
+		}
+	}
+	// 返回结果
+	handlers.WrapContext(ctx).Success(conf)
 }
