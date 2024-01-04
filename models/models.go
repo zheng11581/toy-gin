@@ -83,10 +83,10 @@ type App struct {
 	ID             uint      `json:"id"`
 	CreatedAt      time.Time `json:"create_at"`
 	UpdatedAt      time.Time `json:"update_at"`
-	CreateUser     string    `gorm:"size:128;comments:'创建人'"`
-	UpdatedUser    string    `gorm:"size:128;comments:'最后更新人员'"`
-	SpecifyAppCode string    `gorm:"size:256;comments:'指定appCode'" json:"specify_app_code"`
-	SpecifyAppId   string    `gorm:"size:256;comments:'指定appID'" json:"specify_app_id"`
+	CreateUser     string    `gorm:"size:128;comments:'创建人'" json:"create_user"`
+	UpdatedUser    string    `gorm:"size:128;comments:'最后更新人员'" json:"update_user"`
+	SpecifyAppCode string    `gorm:"size:256;comments:'指定appCode';unique:true" json:"specify_app_code"`
+	SpecifyAppName string    `gorm:"size:256;comments:'指定appID'" json:"specify_app_id"`
 }
 
 func (App) TableName() string {

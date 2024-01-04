@@ -14,6 +14,7 @@ func GetRule(ctx *gin.Context) {
 	ruleID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "获取参数失败")
+		return
 	}
 	// 查询 Rule
 	rule := models.Rule{}
@@ -23,8 +24,8 @@ func GetRule(ctx *gin.Context) {
 		switch result.Error {
 		case gorm.ErrRecordNotFound:
 			WrapContext(ctx).Error(http.StatusNotFound, "查询数据失败")
-
 		}
+		return
 	}
 	// 返回查询到的数据
 	WrapContext(ctx).Success(&rule)
@@ -35,6 +36,7 @@ func DeleteRule(ctx *gin.Context) {
 	ruleID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "获取参数失败")
+		return
 	}
 	// 删除 Rule
 	rule := models.Rule{}
@@ -46,6 +48,7 @@ func DeleteRule(ctx *gin.Context) {
 			WrapContext(ctx).Error(http.StatusNotFound, "删除数据失败")
 
 		}
+		return
 	}
 	// 返回被删除的数据
 	WrapContext(ctx).Success(&rule)
@@ -57,6 +60,7 @@ func ListRules(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&reqRule)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "绑定参数失败")
+		return
 	}
 	// 查询 Rule 列表
 	ruleList := []models.Rule{}
@@ -66,6 +70,7 @@ func ListRules(ctx *gin.Context) {
 		case gorm.ErrRecordNotFound:
 			WrapContext(ctx).Error(http.StatusNotFound, "查询数据失败")
 		}
+		return
 	}
 	// 返回查询到的结果
 	WrapContext(ctx).Success(&ruleList)
@@ -77,12 +82,14 @@ func AddRule(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&reqRule)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "绑定参数失败")
+		return
 	}
 	// 新增 Rule
 	rule := models.Rule{}
 	err = BindReqToM(&reqRule, &rule)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "新增数据失败")
+		return
 	}
 	result := models.DB.Create(&rule)
 	if result != nil {
@@ -90,6 +97,7 @@ func AddRule(ctx *gin.Context) {
 		case gorm.ErrRecordNotFound:
 			WrapContext(ctx).Error(http.StatusNotFound, "新增数据失败")
 		}
+		return
 	}
 	// 返回新增的数据
 	WrapContext(ctx).Success(&rule)
@@ -101,17 +109,20 @@ func UpdateRule(ctx *gin.Context) {
 	ruleID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "获取参数失败")
+		return
 	}
 	reqRule := RuleBase{}
 	err = ctx.ShouldBindJSON(&reqRule)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "绑定参数失败")
+		return
 	}
 	// 更新 Rule
 	rule := models.Rule{}
 	err = BindReqToM(&reqRule, &rule)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "更新数据失败")
+		return
 	}
 	rule.ID = uint(ruleID)
 	models.DB.Updates(&rule)

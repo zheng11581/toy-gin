@@ -14,6 +14,7 @@ func GetConf(ctx *gin.Context) {
 	confID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+		return
 	}
 
 	// 查询数据 IngMonitorConf
@@ -25,6 +26,7 @@ func GetConf(ctx *gin.Context) {
 		case gorm.ErrRecordNotFound:
 			WrapContext(ctx).Error(http.StatusNotFound, "查询数据失败")
 		}
+		return
 	}
 
 	// 返回结果
@@ -36,6 +38,7 @@ func DeleteConf(ctx *gin.Context) {
 	confID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+		return
 	}
 
 	// 删除数据 IngMonitorConf
@@ -47,6 +50,7 @@ func DeleteConf(ctx *gin.Context) {
 		case gorm.ErrRecordNotFound:
 			WrapContext(ctx).Error(http.StatusNotFound, "删除数据失败")
 		}
+		return
 	}
 
 	// 返回结果
@@ -59,6 +63,7 @@ func ListConfs(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(reqConf)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+		return
 	}
 
 	// 查询列表 IngMonitorConf
@@ -69,6 +74,7 @@ func ListConfs(ctx *gin.Context) {
 		case gorm.ErrRecordNotFound:
 			WrapContext(ctx).Error(http.StatusNotFound, "查询数据失败")
 		}
+		return
 	}
 
 	// 返回结果
@@ -82,6 +88,7 @@ func AddConf(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&reqConf)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+		return
 	}
 	// 新增数据
 	var conf models.Conf
@@ -94,6 +101,7 @@ func AddConf(ctx *gin.Context) {
 		case gorm.ErrRecordNotFound:
 			WrapContext(ctx).Error(http.StatusNotFound, "新增数据失败")
 		}
+		return
 	}
 	// 返回结果
 	WrapContext(ctx).Success(conf)
@@ -104,11 +112,13 @@ func UpdateConf(ctx *gin.Context) {
 	confID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+		return
 	}
 	reqConf := ConfBase{}
 	err = ctx.ShouldBindJSON(&reqConf)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
+		return
 	}
 	// 更新数据
 	var conf models.Conf
@@ -122,6 +132,7 @@ func UpdateConf(ctx *gin.Context) {
 		case gorm.ErrRecordNotFound:
 			WrapContext(ctx).Error(http.StatusNotFound, "更新数据失败")
 		}
+		return
 	}
 	// 返回结果
 	WrapContext(ctx).Success(conf)

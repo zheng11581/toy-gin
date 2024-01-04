@@ -5,4 +5,5 @@ func init() {
 	DB.AutoMigrate(Rule{})
 	DB.AutoMigrate(Special{})
 	DB.AutoMigrate(Silence{})
+	DB.AutoMigrate(App{})
 }

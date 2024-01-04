@@ -44,7 +44,7 @@ type SilenceRule struct {
 
 type AppBase struct {
 	SpecifyAppCode string `yaml:"specifyAppCode" json:"specify_app_code"`
-	SpecifyAppId   string `yaml:"specifyAppId" json:"specify_app_id"`
+	SpecifyAppName string `yaml:"specifyAppName" json:"specify_app_name"`
 }
 
 // bindReqToM will bind reqObj to obj
@@ -58,4 +58,9 @@ func BindReqToM(reqObj any, obj any) error {
 		return errors.New("Unmarshal失败")
 	}
 	return nil
+}
+
+type Pipeline struct {
+	PipelineName string `json:"pipeline_name"`
+	PipelineCode string `json:"pipeline_code"`
 }
