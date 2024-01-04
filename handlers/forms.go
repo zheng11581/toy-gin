@@ -1,5 +1,11 @@
 package handlers
 
+import (
+	"encoding/json"
+	"errors"
+	"time"
+)
+
 type ConfBase struct {
 	Host string `json:"host" required:"true"`
 	Name string `json:"name"`
@@ -29,7 +35,22 @@ type SpecialRule struct {
 	AlarmRule string `yaml:"alarmRule" json:"alarm_rule"`
 }
 
-type AlertReceiver struct {
-	KafkaAddr string `yaml:"kafkaAddr" json:"kafka_addr"`
-	Topic     string `yaml:"topic" json:"topic"`
+type SilenceRule struct {
+	Expr       string    `yaml:"expr" json:"expr"`
+	ExpireAt   time.Time `yaml:"expireAt" json:"expire_at"`
+	RequireMan string    `yaml:"requireMan" json:"require_man"`
+	Reason     string    `yaml:"reason" json:"reason"`
+}
+
+// bindReqToM will bind reqObj to obj
+func BindReqToM(reqObj any, obj any) error {
+	reqBytes, err := json.Marshal(&reqObj)
+	if err != nil {
+		return errors.New("Marshal失败")
+	}
+	err = json.Unmarshal(reqBytes, &obj)
+	if err != nil {
+		return errors.New("Unmarshal失败")
+	}
+	return nil
 }

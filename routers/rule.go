@@ -12,6 +12,6 @@ func InitRule(group *gin.RouterGroup) {
 	v1.DELETE("/rule/:id", rule.Delete)
 	v1.GET("/rule", rule.List)
 	v1.POST("/rule", rule.Add)
-	v1.PUT("/rule/:id")
+	v1.PUT("/rule/:id", rule.Update)
 
 }

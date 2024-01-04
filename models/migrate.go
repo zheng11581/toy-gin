@@ -1,8 +1,8 @@
 package models
 
 func init() {
-	DB.AutoMigrate(IngMonitorConf{})
-	DB.AutoMigrate(IngMonitorRule{})
-	DB.AutoMigrate(IngMonitorSpecialRule{})
-	DB.AutoMigrate(IngMonitorSilence{})
+	DB.AutoMigrate(Conf{})
+	DB.AutoMigrate(Rule{})
+	DB.AutoMigrate(Special{})
+	DB.AutoMigrate(Silence{})
 }

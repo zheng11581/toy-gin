@@ -2,12 +2,10 @@ package models
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 // IngMonitorConf 全局的一些配置, json或者yaml格式存储，主要是变化不大的配置
-type IngMonitorConf struct {
+type Conf struct {
 	ID        uint      `json:"id"`
 	CreatedAt time.Time `json:"create_at"`
 	UpdatedAt time.Time `json:"update_at"`
@@ -16,31 +14,12 @@ type IngMonitorConf struct {
 	Conf      string    `gorm:"size:2048;comments:'基础配置'" json:"conf"`
 }
 
-func (IngMonitorConf) TableName() string {
+func (Conf) TableName() string {
 	return "ingress_monitor_conf"
 }
 
-// IngMonitorSilence 静音配置
-type IngMonitorSilence struct {
-	ID          uint      `json:"id"`
-	CreatedAt   time.Time `json:"create_at"`
-	UpdatedAt   time.Time `json:"update_at"`
-	CreateUser  string    `gorm:"size:128;comments:'创建人'"`
-	UpdatedUser string    `gorm:"size:128;comments:'最后更新人员'"`
-	ConfType    int       `gorm:"comments:'这条配置属于配置'"`
-	ConfId      int       `gorm:"comments:'这条配置属于那条配置的什么ID'"`
-	Expr        string    `gorm:"size:2048;comments:'规则表达式'"`
-	ExpireAt    time.Time `gorm:"comments:'这条配置什么时候过期'"`
-	RequireMan  string    `gorm:"size:128;comments:'配置谁要求加的'"`
-	Reason      string    `gorm:"size:256;comments:'配置为什么添加'"`
-}
-
-func (IngMonitorSilence) TableName() string {
-	return "ingress_monitor_silence"
-}
-
 // IngMonitorRule 告警规则
-type IngMonitorRule struct {
+type Rule struct {
 	ID             uint      `json:"id"`
 	CreatedAt      time.Time `json:"create_at"`
 	UpdatedAt      time.Time `json:"update_at"`
@@ -56,21 +35,46 @@ type IngMonitorRule struct {
 	Interval       int       `gorm:"comments:'检查企业间'" json:"interval"`
 	AlarmRule      string    `gorm:"size:512;comments:'告警规则'" json:"alarm_rule"`
 	ExtendReceiver string    `gorm:"size:258;comments:'自定义接受组, im group id, 多个逗号分隔'" json:"extend_receiver"`
+	ConfID         int       `gorm:"comments:'属于哪个基础配置，外键'" json:"conf_id"`
+	Conf           Conf      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;comments:'属于哪个基础配置'"`
 }
 
-func (IngMonitorRule) TableName() string {
+func (Rule) TableName() string {
 	return "ingress_monitor_rule"
 }
 
 // IngMonitorSpecialRule 特殊规则
-type IngMonitorSpecialRule struct {
-	gorm.Model
-	CreateUser  string `gorm:"size:128;comments:'创建人'"`
-	UpdatedUser string `gorm:"size:128;comments:'最后更新人员'"`
-	Filter      string `gorm:"size:2048;comments:'匹配规则'"`
-	AlarmRule   string `gorm:"size:2048;comments:'告警规则'"`
+type Special struct {
+	ID          uint      `json:"id"`
+	CreatedAt   time.Time `json:"create_at"`
+	UpdatedAt   time.Time `json:"update_at"`
+	CreateUser  string    `gorm:"size:128;comments:'创建人'"`
+	UpdatedUser string    `gorm:"size:128;comments:'最后更新人员'"`
+	Filter      string    `gorm:"size:2048;comments:'匹配规则'"`
+	AlarmRule   string    `gorm:"size:2048;comments:'告警规则'"`
+	RuleID      int       `gorm:"comments:'属于哪个告警规则，外键'"`
+	Rule        Rule      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;comments:'属于哪个告警规则"`
 }
 
-func (IngMonitorSpecialRule) TableName() string {
+func (Special) TableName() string {
 	return "ingress_monitor_special"
+}
+
+// IngMonitorSilence 静音配置
+type Silence struct {
+	ID          uint      `json:"id"`
+	CreatedAt   time.Time `json:"create_at"`
+	UpdatedAt   time.Time `json:"update_at"`
+	CreateUser  string    `gorm:"size:128;comments:'创建人'"`
+	UpdatedUser string    `gorm:"size:128;comments:'最后更新人员'"`
+	Expr        string    `gorm:"size:2048;comments:'规则表达式'"`
+	ExpireAt    time.Time `gorm:"comments:'这条配置什么时候过期'"`
+	RequireMan  string    `gorm:"size:128;comments:'配置谁要求加的'"`
+	Reason      string    `gorm:"size:256;comments:'配置为什么添加'"`
+	RuleID      int       `gorm:"comments:'属于哪个告警规则，外键'"`
+	Rule        Rule      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;comments:'属于哪个告警规则"`
+}
+
+func (Silence) TableName() string {
+	return "ingress_monitor_silence"
 }

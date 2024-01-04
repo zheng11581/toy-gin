@@ -18,7 +18,7 @@ func Get(ctx *gin.Context) {
 	}
 
 	// 查询数据 IngMonitorConf
-	var conf models.IngMonitorConf
+	var conf models.Conf
 	conf.ID = uint(confID)
 	result := models.DB.First(&conf)
 	if result.Error != nil {
@@ -40,7 +40,7 @@ func Delete(ctx *gin.Context) {
 	}
 
 	// 删除数据 IngMonitorConf
-	var conf models.IngMonitorConf
+	var conf models.Conf
 	conf.ID = uint(confID)
 	result := models.DB.Delete(&conf)
 	if result.Error != nil {
@@ -63,7 +63,7 @@ func List(ctx *gin.Context) {
 	}
 
 	// 查询列表 IngMonitorConf
-	var confList []models.IngMonitorConf
+	var confList []models.Conf
 	result := models.DB.Where("host = ?", reqConf.Host).Find(&confList)
 	if result.Error != nil {
 		switch result.Error {
@@ -85,7 +85,7 @@ func Add(ctx *gin.Context) {
 		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
 	}
 	// 新增数据
-	var conf models.IngMonitorConf
+	var conf models.Conf
 	conf.Host = reqConf.Host
 	conf.Name = reqConf.Name
 	conf.Conf = reqConf.Conf
@@ -112,7 +112,7 @@ func Update(ctx *gin.Context) {
 		handlers.WrapContext(ctx).Error(http.StatusInternalServerError, "参数获取失败")
 	}
 	// 更新数据
-	var conf models.IngMonitorConf
+	var conf models.Conf
 	conf.ID = uint(confID)
 	conf.Host = reqConf.Host
 	conf.Name = reqConf.Name
