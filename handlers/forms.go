@@ -42,6 +42,11 @@ type SilenceRule struct {
 	Reason     string    `yaml:"reason" json:"reason"`
 }
 
+type AppBase struct {
+	SpecifyAppCode string `yaml:"specifyAppCode" json:"specify_app_code"`
+	SpecifyAppId   string `yaml:"specifyAppId" json:"specify_app_id"`
+}
+
 // bindReqToM will bind reqObj to obj
 func BindReqToM(reqObj any, obj any) error {
 	reqBytes, err := json.Marshal(&reqObj)

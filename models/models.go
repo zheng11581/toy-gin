@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// IngMonitorConf 全局的一些配置, json或者yaml格式存储，主要是变化不大的配置
+// 全局的一些配置, json或者yaml格式存储，主要是变化不大的配置
 type Conf struct {
 	ID        uint      `json:"id"`
 	CreatedAt time.Time `json:"create_at"`
@@ -18,7 +18,7 @@ func (Conf) TableName() string {
 	return "ingress_monitor_conf"
 }
 
-// IngMonitorRule 告警规则
+// 告警规则
 type Rule struct {
 	ID             uint      `json:"id"`
 	CreatedAt      time.Time `json:"create_at"`
@@ -43,7 +43,7 @@ func (Rule) TableName() string {
 	return "ingress_monitor_rule"
 }
 
-// IngMonitorSpecialRule 特殊规则
+// 特殊规则
 type Special struct {
 	ID          uint      `json:"id"`
 	CreatedAt   time.Time `json:"create_at"`
@@ -60,7 +60,7 @@ func (Special) TableName() string {
 	return "ingress_monitor_special"
 }
 
-// IngMonitorSilence 静音配置
+// 静音配置
 type Silence struct {
 	ID          uint      `json:"id"`
 	CreatedAt   time.Time `json:"create_at"`
@@ -77,4 +77,18 @@ type Silence struct {
 
 func (Silence) TableName() string {
 	return "ingress_monitor_silence"
+}
+
+type App struct {
+	ID             uint      `json:"id"`
+	CreatedAt      time.Time `json:"create_at"`
+	UpdatedAt      time.Time `json:"update_at"`
+	CreateUser     string    `gorm:"size:128;comments:'创建人'"`
+	UpdatedUser    string    `gorm:"size:128;comments:'最后更新人员'"`
+	SpecifyAppCode string    `gorm:"size:256;comments:'指定appCode'" json:"specify_app_code"`
+	SpecifyAppId   string    `gorm:"size:256;comments:'指定appID'" json:"specify_app_id"`
+}
+
+func (App) TableName() string {
+	return "ingress_monitor_app"
 }

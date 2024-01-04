@@ -17,5 +17,6 @@ func InitRouters(r *gin.Engine) {
 	// InitLogin(noAuthApi)
 	InitConf(noAuthApi)
 	InitRule(noAuthApi)
+	InitApp(noAuthApi)
 
 }
