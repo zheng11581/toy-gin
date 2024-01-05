@@ -14,4 +14,10 @@ func InitRule(group *gin.RouterGroup) {
 	v1.POST("/rule", handlers.AddRule)
 	v1.PUT("/rule/:id", handlers.UpdateRule)
 
+	v1.GET("/rule/special/:id", handlers.GetSpecialRule)
+	v1.DELETE("/rule/special/:id", handlers.DeleteSpecialRule)
+	v1.GET("/rule/special", handlers.ListSpecialRule)
+	v1.POST("/rule/special", handlers.AddSpecialRule)
+	v1.PUT("/rule/special/:id", handlers.UpdateSpecialRule)
+
 }

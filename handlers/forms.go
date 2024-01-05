@@ -33,6 +33,7 @@ type SpecialRule struct {
 	ID        int    `json:"id"`
 	Filter    string `yaml:"filter" json:"filter"`
 	AlarmRule string `yaml:"alarmRule" json:"alarm_rule"`
+	RuleID    int    `json:"rule_id"`
 }
 
 type SilenceRule struct {
@@ -41,6 +42,7 @@ type SilenceRule struct {
 	ExpireAt   time.Time `yaml:"expireAt" json:"expire_at"`
 	RequireMan string    `yaml:"requireMan" json:"require_man"`
 	Reason     string    `yaml:"reason" json:"reason"`
+	RuleID     int       `json:"rule_id"`
 }
 
 type AppBase struct {

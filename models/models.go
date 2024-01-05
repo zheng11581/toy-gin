@@ -45,24 +45,24 @@ func (Rule) TableName() string {
 }
 
 // 特殊规则
-type Special struct {
+type SpecialRule struct {
 	ID          uint      `json:"id"`
 	CreatedAt   time.Time `json:"create_at"`
 	UpdatedAt   time.Time `json:"update_at"`
-	CreateUser  string    `gorm:"size:128;comments:'创建人'"`
-	UpdatedUser string    `gorm:"size:128;comments:'最后更新人员'"`
-	Filter      string    `gorm:"size:2048;comments:'匹配规则'"`
-	AlarmRule   string    `gorm:"size:2048;comments:'告警规则'"`
-	RuleID      int       `gorm:"comments:'属于哪个告警规则，外键'"`
+	CreateUser  string    `gorm:"size:128;comments:'创建人'" json:"create_user"`
+	UpdatedUser string    `gorm:"size:128;comments:'最后更新人员'" json:"update_user"`
+	Filter      string    `gorm:"size:2048;comments:'匹配规则'" json:"filter"`
+	AlarmRule   string    `gorm:"size:2048;comments:'告警规则'" json:"alarm_rule"`
+	RuleID      int       `gorm:"comments:'属于哪个告警规则，外键'" json:"rule_id"`
 	Rule        Rule      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;comments:'属于哪个告警规则"`
 }
 
-func (Special) TableName() string {
+func (SpecialRule) TableName() string {
 	return "ingress_monitor_special"
 }
 
 // 静音配置
-type Silence struct {
+type SilenceRule struct {
 	ID          uint      `json:"id"`
 	CreatedAt   time.Time `json:"create_at"`
 	UpdatedAt   time.Time `json:"update_at"`
@@ -76,7 +76,7 @@ type Silence struct {
 	Rule        Rule      `gorm:"constraint:OnUpdate:CASCADE,OnDelete:RESTRICT;comments:'属于哪个告警规则"`
 }
 
-func (Silence) TableName() string {
+func (SilenceRule) TableName() string {
 	return "ingress_monitor_silence"
 }
 
