@@ -18,7 +18,7 @@ func GetApps(ctx *gin.Context) {
 	}
 	// 根据app_code查询App
 	var appList []models.App
-	result := models.DB.Where("specify_app_code LIKE %?%", reqApp.SpecifyAppCode).Find(&appList)
+	result := models.DB.Where("specify_app_code LIKE ?", "%"+reqApp.SpecifyAppCode+"%").Or("specify_app_name LIKE ?", "%"+reqApp.SpecifyAppName+"%").Find(&appList)
 	if result.Error != nil {
 		switch result.Error {
 		case gorm.ErrRecordNotFound:
@@ -27,7 +27,9 @@ func GetApps(ctx *gin.Context) {
 		return
 	}
 	// 返回查询App结果
-	WrapContext(ctx).Success(&appList)
+	var reqAppList []AppBase
+	BindReqAndM(&appList, &reqAppList)
+	WrapContext(ctx).Success(&reqAppList)
 }
 
 func AddApp(ctx *gin.Context) {
@@ -67,6 +69,7 @@ func AddApp(ctx *gin.Context) {
 
 	}
 	// 返回新增App
-	WrapContext(ctx).Success(&app)
+	BindReqAndM(&app, &reqApp)
+	WrapContext(ctx).Success(&reqApp)
 
 }

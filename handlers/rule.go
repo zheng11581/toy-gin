@@ -65,7 +65,7 @@ func ListRules(ctx *gin.Context) {
 	// 查询 Rule 列表
 	ruleList := []models.Rule{}
 	result := models.DB.Where("specify_app_code = ?", reqRule.SpecifyAppCode).Find(&ruleList)
-	if result != nil {
+	if result.Error != nil {
 		switch result.Error {
 		case gorm.ErrRecordNotFound:
 			WrapContext(ctx).Error(http.StatusNotFound, "查询数据失败")
@@ -73,7 +73,9 @@ func ListRules(ctx *gin.Context) {
 		return
 	}
 	// 返回查询到的结果
-	WrapContext(ctx).Success(&ruleList)
+	var reqRuleList []RuleBase
+	BindReqAndM(&ruleList, &reqRuleList)
+	WrapContext(ctx).Success(&reqRuleList)
 }
 
 func AddRule(ctx *gin.Context) {
@@ -86,13 +88,13 @@ func AddRule(ctx *gin.Context) {
 	}
 	// 新增 Rule
 	rule := models.Rule{}
-	err = BindReqToM(&reqRule, &rule)
+	err = BindReqAndM(&reqRule, &rule)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "新增数据失败")
 		return
 	}
 	result := models.DB.Create(&rule)
-	if result != nil {
+	if result.Error != nil {
 		switch result.Error {
 		case gorm.ErrRecordNotFound:
 			WrapContext(ctx).Error(http.StatusNotFound, "新增数据失败")
@@ -100,7 +102,8 @@ func AddRule(ctx *gin.Context) {
 		return
 	}
 	// 返回新增的数据
-	WrapContext(ctx).Success(&rule)
+	BindReqAndM(&rule, &reqRule)
+	WrapContext(ctx).Success(&reqRule)
 
 }
 
@@ -119,13 +122,21 @@ func UpdateRule(ctx *gin.Context) {
 	}
 	// 更新 Rule
 	rule := models.Rule{}
-	err = BindReqToM(&reqRule, &rule)
+	err = BindReqAndM(&reqRule, &rule)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "更新数据失败")
 		return
 	}
 	rule.ID = uint(ruleID)
-	models.DB.Updates(&rule)
+	result := models.DB.Updates(&rule)
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			WrapContext(ctx).Error(http.StatusNotFound, "更新数据失败")
+		}
+		return
+	}
 	// 返回更新的数据
-	WrapContext(ctx).Success(&rule)
+	BindReqAndM(&rule, &reqRule)
+	WrapContext(ctx).Success(&reqRule)
 }

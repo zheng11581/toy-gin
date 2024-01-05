@@ -30,7 +30,9 @@ func GetConf(ctx *gin.Context) {
 	}
 
 	// 返回结果
-	WrapContext(ctx).Success(&conf)
+	reqConf := ConfBase{}
+	BindReqAndM(&conf, &reqConf)
+	WrapContext(ctx).Success(&reqConf)
 }
 
 func DeleteConf(ctx *gin.Context) {
@@ -54,6 +56,8 @@ func DeleteConf(ctx *gin.Context) {
 	}
 
 	// 返回结果
+	reqConf := ConfBase{}
+	BindReqAndM(&conf, &reqConf)
 	WrapContext(ctx).Success(&conf)
 }
 
@@ -78,7 +82,9 @@ func ListConfs(ctx *gin.Context) {
 	}
 
 	// 返回结果
-	WrapContext(ctx).Success(confList)
+	var reqConfList []ConfBase
+	BindReqAndM(&confList, &reqConfList)
+	WrapContext(ctx).Success(&reqConfList)
 
 }
 
@@ -104,7 +110,8 @@ func AddConf(ctx *gin.Context) {
 		return
 	}
 	// 返回结果
-	WrapContext(ctx).Success(conf)
+	BindReqAndM(&conf, &reqConf)
+	WrapContext(ctx).Success(&reqConf)
 }
 
 func UpdateConf(ctx *gin.Context) {
@@ -135,5 +142,6 @@ func UpdateConf(ctx *gin.Context) {
 		return
 	}
 	// 返回结果
-	WrapContext(ctx).Success(conf)
+	BindReqAndM(&conf, &reqConf)
+	WrapContext(ctx).Success(&reqConf)
 }
