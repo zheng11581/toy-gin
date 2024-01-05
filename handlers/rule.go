@@ -28,7 +28,9 @@ func GetRule(ctx *gin.Context) {
 		return
 	}
 	// 返回查询到的数据
-	WrapContext(ctx).Success(&rule)
+	reqRule := RuleBase{}
+	BindReqAndM(&rule, &reqRule)
+	WrapContext(ctx).Success(&reqRule)
 }
 
 func DeleteRule(ctx *gin.Context) {
@@ -51,13 +53,15 @@ func DeleteRule(ctx *gin.Context) {
 		return
 	}
 	// 返回被删除的数据
-	WrapContext(ctx).Success(&rule)
+	reqRule := RuleBase{}
+	BindReqAndM(&rule, &reqRule)
+	WrapContext(ctx).Success(&reqRule)
 }
 
 func ListRules(ctx *gin.Context) {
 	// 获取、绑定参数
 	reqRule := RuleBase{}
-	err := ctx.ShouldBindJSON(&reqRule)
+	err := ctx.ShouldBindQuery(&reqRule)
 	if err != nil {
 		WrapContext(ctx).Error(http.StatusInternalServerError, "绑定参数失败")
 		return

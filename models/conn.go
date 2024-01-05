@@ -2,6 +2,7 @@ package models
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -13,10 +14,11 @@ var DB *gorm.DB
 var DSN = "root:password123456@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=True&loc=Local"
 
 var DB1 *gorm.DB
-var DSN1 = "xxx:xxxx@tcp(172.20.34.88:12325)/yonyou_cloud?charset=utf8mb4&parseTime=True&loc=Local"
+var DSN1 = os.Getenv("DSN1")
 
 func init() {
 	var err error
+
 	DB, err = gorm.Open(mysql.New(mysql.Config{
 		DSN:               DSN, // data source name
 		DefaultStringSize: 256, // default size for string fields
