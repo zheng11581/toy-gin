@@ -20,4 +20,10 @@ func InitRule(group *gin.RouterGroup) {
 	v1.POST("/rule/special", handlers.AddSpecialRule)
 	v1.PUT("/rule/special/:id", handlers.UpdateSpecialRule)
 
+	v1.GET("/rule/silence/:id", handlers.GetSilenceRule)
+	v1.DELETE("/rule/silence/:id", handlers.DeleteSilenceRule)
+	v1.GET("/rule/silence", handlers.ListSilenceRule)
+	v1.POST("/rule/silence", handlers.AddSilenceRule)
+	v1.PUT("/rule/silence/:id", handlers.UpdateSilenceRule)
+
 }

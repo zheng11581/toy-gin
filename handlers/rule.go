@@ -270,3 +270,141 @@ func UpdateSpecialRule(ctx *gin.Context) {
 	BindReqAndM(&specRule, &reqSpecRule)
 	WrapContext(ctx).Success(&reqSpecRule)
 }
+
+func GetSilenceRule(ctx *gin.Context) {
+	// 获取、绑定请求参数
+	silRuleID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
+	if err != nil {
+		WrapContext(ctx).Error(http.StatusInternalServerError, "获取参数失败")
+		return
+	}
+
+	// 查询 SilenceRule 详情
+	silRule := models.SilenceRule{}
+	silRule.ID = uint(silRuleID)
+	result := models.DB.Find(&silRule)
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			WrapContext(ctx).Error(http.StatusInternalServerError, "查询数据失败")
+		}
+		return
+	}
+
+	// 返回查询结果
+	reqSilRule := SilenceRule{}
+	BindReqAndM(&silRule, &reqSilRule)
+	WrapContext(ctx).Success(&reqSilRule)
+
+}
+
+func DeleteSilenceRule(ctx *gin.Context) {
+	// 获取、绑定请求参数
+	silRuleID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
+	if err != nil {
+		WrapContext(ctx).Error(http.StatusInternalServerError, "获取参数失败")
+		return
+	}
+
+	// 查询 SilenceRule 详情
+	silRule := models.SilenceRule{}
+	silRule.ID = uint(silRuleID)
+	result := models.DB.Delete(&silRule)
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			WrapContext(ctx).Error(http.StatusInternalServerError, "删除数据失败")
+		}
+		return
+	}
+
+	// 返回被删除的数据
+	reqSilRule := SilenceRule{}
+	BindReqAndM(&silRule, &reqSilRule)
+	WrapContext(ctx).Success(&reqSilRule)
+
+}
+
+func ListSilenceRule(ctx *gin.Context) {
+	// 获取、绑定请求参数
+	reqSilRule := SilenceRule{}
+	err := ctx.ShouldBindQuery(&reqSilRule)
+	if err != nil {
+		WrapContext(ctx).Error(http.StatusInternalServerError, "绑定参数失败")
+		return
+	}
+
+	// 查询 SilenceRule 列表
+	var silRuleList []models.SilenceRule
+	result := models.DB.Where("rule_id = ?", reqSilRule.RuleID).Find(&silRuleList)
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			WrapContext(ctx).Error(http.StatusNotFound, "查询数据失败")
+		}
+		return
+	}
+
+	// 返回查询的数据
+	var reqSilRuleList []SilenceRule
+	BindReqAndM(&silRuleList, &reqSilRuleList)
+	WrapContext(ctx).Success(&reqSilRuleList)
+}
+
+func AddSilenceRule(ctx *gin.Context) {
+	// 获取、绑定请求参数
+	reqSilRule := SilenceRule{}
+	err := ctx.ShouldBindJSON(&reqSilRule)
+	if err != nil {
+		WrapContext(ctx).Error(http.StatusInternalServerError, "绑定参数失败")
+		return
+	}
+
+	// 新增 SilenceRule 数据
+	silRule := models.SilenceRule{}
+	BindReqAndM(&reqSilRule, &silRule)
+	result := models.DB.Updates(&silRule)
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			WrapContext(ctx).Error(http.StatusNotFound, "新增数据失败")
+		}
+		return
+	}
+
+	// 返回被更新的数据
+	BindReqAndM(&silRule, &reqSilRule)
+	WrapContext(ctx).Success(&reqSilRule)
+}
+
+func UpdateSilenceRule(ctx *gin.Context) {
+	// 获取、绑定请求参数
+	silRuleID, err := strconv.ParseUint(ctx.Param("id"), 8, 64)
+	if err != nil {
+		WrapContext(ctx).Error(http.StatusInternalServerError, "获取参数失败")
+		return
+	}
+	reqSilRule := SilenceRule{}
+	err = ctx.ShouldBindJSON(&reqSilRule)
+	if err != nil {
+		WrapContext(ctx).Error(http.StatusInternalServerError, "绑定参数失败")
+		return
+	}
+
+	// 更新 SilenceRule 数据
+	silRule := models.SilenceRule{}
+	silRule.ID = uint(silRuleID)
+	BindReqAndM(&reqSilRule, &silRule)
+	result := models.DB.Updates(&silRule)
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			WrapContext(ctx).Error(http.StatusNotFound, "更新数据失败")
+		}
+		return
+	}
+
+	// 返回被更新的数据
+	BindReqAndM(&silRule, &reqSilRule)
+	WrapContext(ctx).Success(&reqSilRule)
+}
